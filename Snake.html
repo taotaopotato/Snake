@@ -5,41 +5,61 @@
         <script lang='javascript'>
                 let ctx = null;
                 let blockWidth = 50;
-                let x = 0
-                let y = 0
+                let x = 3
+                let y = 3
+                let a = 3
+                let b = 3
                 let i = 0
-
                 class Snake {
                         constructor(x, y) {
                                 this.x = x
                                 this.y = y
+                                this.a = a
+                                this.b = b
                                 this.blockWidth = 50
                         }
                         moveLeft() {
+                                this.a = this.x;
+                                this.b = this.y;
                                 this.x--
                         }
                         moveRight() {
+                                this.a = this.x;
+                                this.b = this.y;
                                 this.x++
                         }
                         moveDown() {
+                                this.a = this.x;
+                                this.b = this.y;
                                 this.y++
                         }
                         moveUp() {
+                                this.a = this.x;
+                                this.b = this.y;
                                 this.y--
                         }
-                        draw(ctx) {
+                        headBlock(ctx) {
                                 ctx.fillRect(this.x * this.blockWidth, this.y * this.blockWidth, this.blockWidth, this.blockWidth);
                                 ctx.strokeRect(this.x * this.blockWidth, this.y * this.blockWidth, this.blockWidth, this.blockWidth);
-                                ctx.fillRect((this.x + 1) * this.blockWidth, this.y * this.blockWidth, this.blockWidth, this.blockWidth);
-                                ctx.strokeRect((this.x + 1) * this.blockWidth, this.y * this.blockWidth, this.blockWidth, this.blockWidth);
+                               
                         }
+                        secondStartBlock(ctx) {
+                                ctx.fillRect((this.x - 1) * this.blockWidth, this.y * this.blockWidth, this.blockWidth, this.blockWidth);
+                                ctx.strokeRect((this.x - 1) * this.blockWidth, this.y * this.blockWidth, this.blockWidth, this.blockWidth);
+
+                        }
+                        secondBlock() {
+                                ctx.fillRect(this.a * this.blockWidth, this.b * this.blockWidth, this.blockWidth, this.blockWidth);
+                                ctx.strokeRect(this.a * this.blockWidth, this.b * this.blockWidth, this.blockWidth, this.blockWidth);
+                        }
+                       
 
                 }
+                class Block {}
 
+                function firstFood() {
 
-
-
-
+                }
                 function initializeSnake() {
                         disableArrowKey();
                         let snakeCanvas = document.getElementById('snakeCanvas');
@@ -47,24 +67,21 @@
                         ctx.fillStyle = 'red';
                         ctx.strokeStyle = 'black';
                         snake = new Snake(3, 3);
-                        snake.draw(ctx);
-
+                        snake.headBlock(ctx);
+                        ctx.fillStyle = 'green';
+                        snake.secondStartBlock(ctx);
                 }
-
-
                 function disableArrowKey() {
                         window.addEventListener("keydown", function (e) {
                                 // space and arrow keys
                                 if ([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
                                         e.preventDefault();
                                 }
-                        }, false);
+                }, false);              
                 }
-
                 function clearCanvas(ctx) {
                         ctx.clearRect(0, 0, 1000, 1000);
                 }
-
                 function moveShape() {
                         let k = event.keyCode;
                         if (k == 37) {
@@ -73,15 +90,18 @@
                         if (k == 39) {
                                 snake.moveRight();
                         }
-                        if (k==38) {
+                        if (k == 38) {
                                 snake.moveUp();
                         }
                         if (k == 40) {
                                 snake.moveDown();
                         }
-                        
+
                         clearCanvas(ctx);
-                        snake.draw(ctx)
+                        ctx.fillStyle = 'red';
+                        snake.headBlock(ctx)
+                        ctx.fillStyle = 'green';
+                        snake.secondBlock(ctx);
 
                 }
         </script>
